@@ -1,0 +1,2464 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Elitebags — Haute Maroquinerie & Atelier</title>
+
+  <!-- Typography & Icons -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&family=Playfair+Display:ital,wght@1,400;1,600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+  <style>
+    :root {
+      --bg: #070709;
+      --bg-alt: #0e0e12;
+      --surface: #141419;
+      --surface-border: #23232c;
+      --gold-primary: #d4af37;
+      --gold-light: #f6e6b5;
+      --gold-dark: #917521;
+      --text-main: #f4f4f7;
+      --text-muted: #9696a4;
+      --wa-green: #25d366;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      background-color: var(--bg);
+      color: var(--text-main);
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      line-height: 1.6;
+      overflow-x: hidden;
+      position: relative;
+    }
+
+    /* =========================================================================
+       ⏳ ATELIER HAUTE PRELOADER ANIMATION
+       ========================================================================= */
+    #preloader {
+      position: fixed;
+      inset: 0;
+      background: #050507;
+      z-index: 999999;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      transition: opacity 0.8s cubic-bezier(0.2, 1, 0.3, 1), visibility 0.8s ease, transform 0.8s cubic-bezier(0.2, 1, 0.3, 1);
+    }
+
+    #preloader.loaded {
+      opacity: 0;
+      visibility: hidden;
+      transform: scale(1.04);
+      pointer-events: none;
+    }
+
+    .preloader-crest {
+      position: relative;
+      width: 110px;
+      height: 110px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 2rem;
+    }
+
+    .preloader-ring-outer {
+      position: absolute;
+      inset: 0;
+      border-radius: 50%;
+      border: 1px dashed rgba(212, 175, 55, 0.3);
+      animation: spinPreloader 14s linear infinite;
+    }
+
+    .preloader-ring-inner {
+      position: absolute;
+      inset: 8px;
+      border-radius: 50%;
+      border: 2px solid transparent;
+      border-top-color: var(--gold-primary);
+      border-right-color: var(--gold-light);
+      animation: spinPreloader 2.4s cubic-bezier(0.68, -0.55, 0.27, 1.55) infinite;
+    }
+
+    .preloader-icon {
+      font-size: 2.2rem;
+      color: var(--gold-light);
+      filter: drop-shadow(0 0 14px rgba(212, 175, 55, 0.6));
+      animation: pulseCrest 2s ease-in-out infinite alternate;
+    }
+
+    @keyframes spinPreloader {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+
+    @keyframes pulseCrest {
+      0% { transform: scale(0.92); opacity: 0.75; }
+      100% { transform: scale(1.08); opacity: 1; filter: drop-shadow(0 0 22px rgba(212, 175, 55, 0.9)); }
+    }
+
+    .preloader-brand {
+      font-family: 'Cinzel', serif;
+      font-size: 1.5rem;
+      letter-spacing: 0.32em;
+      color: #fff;
+      margin-bottom: 0.3rem;
+      text-transform: uppercase;
+    }
+
+    .preloader-brand span {
+      color: var(--gold-primary);
+    }
+
+    .preloader-tagline {
+      font-size: 0.7rem;
+      letter-spacing: 0.35em;
+      text-transform: uppercase;
+      color: var(--text-muted);
+      margin-bottom: 1.8rem;
+    }
+
+    .preloader-bar-wrap {
+      width: 180px;
+      height: 2px;
+      background: rgba(255, 255, 255, 0.08);
+      border-radius: 9999px;
+      overflow: hidden;
+      position: relative;
+    }
+
+    .preloader-bar-fill {
+      position: absolute;
+      left: 0;
+      top: 0;
+      bottom: 0;
+      width: 0%;
+      background: linear-gradient(90deg, var(--gold-dark), var(--gold-primary), var(--gold-light));
+      transition: width 0.2s ease-out;
+      box-shadow: 0 0 10px rgba(212, 175, 55, 0.8);
+    }
+
+    .preloader-counter {
+      margin-top: 0.8rem;
+      font-size: 0.75rem;
+      font-family: 'Cinzel', serif;
+      letter-spacing: 0.15em;
+      color: var(--gold-light);
+    }
+
+    /* =========================================================================
+       ✨ ADVANCED MOUSE TRACKING & AMBIENT ANIMATION LAYERS
+       ========================================================================= */
+    .ambient-background-layer {
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      z-index: 0;
+      overflow: hidden;
+    }
+
+    .ambient-grid {
+      position: absolute;
+      inset: 0;
+      background-image: 
+        linear-gradient(to right, rgba(212, 175, 55, 0.025) 1px, transparent 1px),
+        linear-gradient(to bottom, rgba(212, 175, 55, 0.025) 1px, transparent 1px);
+      background-size: 64px 64px;
+      mask-image: radial-gradient(circle at 50% 50%, black 40%, transparent 95%);
+    }
+
+    .glow-orb {
+      position: absolute;
+      border-radius: 50%;
+      filter: blur(100px);
+      opacity: 0.18;
+      will-change: transform;
+      animation: floatNebula 22s infinite alternate ease-in-out;
+    }
+
+    .glow-orb-1 {
+      width: 580px;
+      height: 580px;
+      background: radial-gradient(circle, var(--gold-primary), transparent 70%);
+      top: -120px;
+      left: -100px;
+      animation-duration: 24s;
+    }
+
+    .glow-orb-2 {
+      width: 700px;
+      height: 700px;
+      background: radial-gradient(circle, #b8860b, transparent 70%);
+      top: 45%;
+      right: -200px;
+      animation-duration: 30s;
+      animation-delay: -6s;
+    }
+
+    .glow-orb-3 {
+      width: 500px;
+      height: 500px;
+      background: radial-gradient(circle, var(--gold-light), transparent 70%);
+      bottom: 5%;
+      left: 10%;
+      animation-duration: 26s;
+      animation-delay: -12s;
+    }
+
+    @keyframes floatNebula {
+      0% { transform: translate3d(0, 0, 0) scale(1); }
+      50% { transform: translate3d(80px, 110px, 0) scale(1.15); }
+      100% { transform: translate3d(-60px, 60px, 0) scale(0.9); }
+    }
+
+    #cursorCanvas {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      pointer-events: none;
+      z-index: 9998;
+    }
+
+    .cursor-dot {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 6px;
+      height: 6px;
+      background: var(--gold-light);
+      border-radius: 50%;
+      pointer-events: none;
+      z-index: 9999;
+      transform: translate(-50%, -50%);
+      box-shadow: 0 0 10px var(--gold-primary);
+      transition: opacity 0.3s ease, transform 0.05s ease;
+      opacity: 0;
+    }
+
+    .cursor-ring {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 38px;
+      height: 38px;
+      border: 1px solid rgba(212, 175, 55, 0.45);
+      border-radius: 50%;
+      pointer-events: none;
+      z-index: 9999;
+      transform: translate(-50%, -50%);
+      transition: width 0.25s ease, height 0.25s ease, border-color 0.25s ease, background 0.25s ease, opacity 0.3s ease;
+      opacity: 0;
+    }
+
+    .cursor-ring.active-hover {
+      width: 58px;
+      height: 58px;
+      border-color: var(--gold-light);
+      background: rgba(212, 175, 55, 0.08);
+      box-shadow: 0 0 20px rgba(212, 175, 55, 0.35);
+    }
+
+    .mouse-ambient-spotlight {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 650px;
+      height: 650px;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(212, 175, 55, 0.065) 0%, rgba(212, 175, 55, 0.015) 45%, transparent 70%);
+      pointer-events: none;
+      transform: translate(-50%, -50%);
+      z-index: 1;
+      opacity: 0;
+      transition: opacity 0.4s ease;
+      will-change: transform;
+    }
+
+    .shimmer-sweep {
+      position: relative;
+      overflow: hidden;
+    }
+
+    .shimmer-sweep::after {
+      content: "";
+      position: absolute;
+      top: -50%;
+      left: -60%;
+      width: 20%;
+      height: 200%;
+      background: linear-gradient(60deg, transparent, rgba(246, 230, 181, 0.12), transparent);
+      transform: rotate(25deg);
+      animation: sweepGlint 9s infinite ease-in-out;
+      pointer-events: none;
+    }
+
+    @keyframes sweepGlint {
+      0%, 75% { left: -70%; }
+      100% { left: 160%; }
+    }
+
+    .site-content {
+      position: relative;
+      z-index: 2;
+    }
+
+    h1, h2, h3, h4, .serif {
+      font-family: 'Cinzel', serif;
+      letter-spacing: 0.05em;
+    }
+
+    .italic-serif {
+      font-family: 'Playfair Display', serif;
+      font-style: italic;
+    }
+
+    .container {
+      max-width: 1260px;
+      margin: 0 auto;
+      padding: 0 1.5rem;
+    }
+
+    /* Top Strip */
+    .top-strip {
+      background: rgba(0, 0, 0, 0.85);
+      backdrop-filter: blur(8px);
+      border-bottom: 1px solid rgba(212, 175, 55, 0.15);
+      font-size: 0.72rem;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--gold-light);
+      padding: 0.5rem 0;
+      text-align: center;
+    }
+
+    /* Header */
+    header {
+      position: sticky;
+      top: 0;
+      z-index: 50;
+      background: rgba(7, 7, 9, 0.88);
+      backdrop-filter: blur(16px);
+      border-bottom: 1px solid rgba(212, 175, 55, 0.12);
+    }
+
+    .navbar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      height: 80px;
+    }
+
+    .brand {
+      text-decoration: none;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .brand-title {
+      font-size: 1.55rem;
+      font-weight: 700;
+      color: #fff;
+      letter-spacing: 0.15em;
+      line-height: 1.1;
+    }
+
+    .brand-title span {
+      color: var(--gold-primary);
+    }
+
+    .brand-sub {
+      font-size: 0.62rem;
+      letter-spacing: 0.35em;
+      text-transform: uppercase;
+      color: var(--gold-light);
+      opacity: 0.85;
+    }
+
+    .nav-links {
+      display: flex;
+      align-items: center;
+      gap: 1.8rem;
+    }
+
+    .nav-links a {
+      color: var(--text-muted);
+      text-decoration: none;
+      font-size: 0.85rem;
+      letter-spacing: 0.04em;
+      transition: color 0.25s ease;
+    }
+
+    .nav-links a:hover {
+      color: var(--gold-light);
+    }
+
+    .nav-concierge-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.6rem 1.2rem;
+      border-radius: 9999px;
+      border: 1px solid rgba(212, 175, 55, 0.35);
+      background: rgba(212, 175, 55, 0.05);
+      color: var(--gold-light);
+      font-size: 0.82rem;
+      font-weight: 500;
+      text-decoration: none;
+      transition: all 0.3s;
+    }
+
+    .nav-concierge-btn:hover {
+      background: var(--gold-primary);
+      color: #000;
+      border-color: var(--gold-primary);
+      box-shadow: 0 0 20px rgba(212, 175, 55, 0.4);
+    }
+
+    /* Fixed Floating WhatsApp Corner Button */
+    .wa-float-container {
+      position: fixed;
+      bottom: 26px;
+      right: 26px;
+      z-index: 999;
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+    }
+
+    .wa-tooltip {
+      background: rgba(20, 20, 25, 0.95);
+      border: 1px solid rgba(212, 175, 55, 0.3);
+      backdrop-filter: blur(8px);
+      padding: 0.55rem 0.9rem;
+      border-radius: 8px;
+      color: var(--gold-light);
+      font-size: 0.78rem;
+      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.6);
+      pointer-events: none;
+      white-space: nowrap;
+    }
+
+    .wa-float-btn {
+      position: relative;
+      width: 60px;
+      height: 60px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, #25d366, #128c7e);
+      color: #fff;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.85rem;
+      text-decoration: none;
+      box-shadow: 0 10px 30px rgba(37, 211, 102, 0.4), 0 0 0 2px rgba(212, 175, 55, 0.4);
+      transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    }
+
+    .wa-float-btn:hover {
+      transform: scale(1.1);
+    }
+
+    .wa-ping-dot {
+      position: absolute;
+      top: 2px;
+      right: 2px;
+      width: 14px;
+      height: 14px;
+      background: var(--gold-primary);
+      border: 2px solid #000;
+      border-radius: 50%;
+      animation: pulseGlow 1.8s infinite;
+    }
+
+    @keyframes pulseGlow {
+      0% { box-shadow: 0 0 0 0 rgba(212, 175, 55, 0.7); }
+      70% { box-shadow: 0 0 0 10px rgba(212, 175, 55, 0); }
+      100% { box-shadow: 0 0 0 0 rgba(212, 175, 55, 0); }
+    }
+
+    /* Hero */
+    .hero {
+      padding: 5.5rem 0 3.5rem;
+      text-align: center;
+      position: relative;
+    }
+
+    .eyebrow {
+      font-size: 0.8rem;
+      text-transform: uppercase;
+      letter-spacing: 0.3em;
+      color: var(--gold-primary);
+      margin-bottom: 0.8rem;
+      display: block;
+    }
+
+    .hero-title {
+      font-size: clamp(2.3rem, 5.5vw, 4rem);
+      color: #ffffff;
+      line-height: 1.15;
+      margin-bottom: 1.2rem;
+      text-shadow: 0 4px 30px rgba(0, 0, 0, 0.7);
+    }
+
+    .hero-desc {
+      max-width: 680px;
+      margin: 0 auto 2.2rem;
+      color: var(--text-muted);
+      font-size: 1.05rem;
+      font-weight: 300;
+    }
+
+    .hero-badges {
+      display: flex;
+      justify-content: center;
+      gap: 2.2rem;
+      flex-wrap: wrap;
+      padding-top: 1rem;
+      border-top: 1px solid rgba(212, 175, 55, 0.15);
+      max-width: 820px;
+      margin: 0 auto;
+    }
+
+    .hero-badge-item {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      font-size: 0.85rem;
+      color: var(--gold-light);
+    }
+
+    .hero-badge-item i {
+      color: var(--gold-primary);
+    }
+
+    /* 🎬 BIG AUTOPLAY VIDEO SECTION */
+    .cinematic-video-section {
+      background: rgba(4, 4, 6, 0.75);
+      padding: 2.5rem 0 4rem;
+      position: relative;
+    }
+
+    .video-viewport {
+      position: relative;
+      width: 100%;
+      height: 540px;
+      border-radius: 16px;
+      overflow: hidden;
+      border: 1px solid rgba(212, 175, 55, 0.35);
+      box-shadow: 0 25px 60px rgba(0, 0, 0, 0.9);
+      background: #000;
+    }
+
+    .video-viewport video {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+
+    .video-controls-overlay {
+      position: absolute;
+      bottom: 24px;
+      right: 24px;
+      display: flex;
+      gap: 0.8rem;
+      z-index: 10;
+    }
+
+    .vid-ctrl-btn {
+      background: rgba(9, 9, 12, 0.82);
+      backdrop-filter: blur(8px);
+      border: 1px solid var(--gold-primary);
+      color: var(--gold-light);
+      padding: 0.6rem 1.1rem;
+      border-radius: 9999px;
+      font-size: 0.8rem;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 0.45rem;
+      transition: all 0.25s ease;
+    }
+
+    .vid-ctrl-btn:hover {
+      background: var(--gold-primary);
+      color: #000;
+      box-shadow: 0 0 15px rgba(212, 175, 55, 0.4);
+    }
+
+    .video-caption-overlay {
+      position: absolute;
+      top: 26px;
+      left: 26px;
+      max-width: 440px;
+      background: rgba(14, 14, 18, 0.85);
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(212, 175, 55, 0.25);
+      border-radius: 10px;
+      padding: 1.2rem 1.4rem;
+      pointer-events: none;
+    }
+
+    .video-caption-overlay h3 {
+      font-size: 1.25rem;
+      color: #fff;
+      margin-bottom: 0.3rem;
+    }
+
+    .video-caption-overlay p {
+      font-size: 0.82rem;
+      color: var(--text-muted);
+    }
+
+    /* Products Catalog */
+    .catalog-section {
+      padding: 4.5rem 0 5.5rem;
+      border-top: 1px solid rgba(212, 175, 55, 0.1);
+    }
+
+    .section-title-wrap {
+      text-align: center;
+      margin-bottom: 3.5rem;
+    }
+
+    .section-title {
+      font-size: 2.2rem;
+      color: #fff;
+      margin-bottom: 0.5rem;
+    }
+
+    .section-subtitle {
+      color: var(--text-muted);
+      font-size: 0.95rem;
+    }
+
+    .products-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(290px, 1fr));
+      gap: 2rem;
+    }
+
+    .card {
+      background: rgba(20, 20, 25, 0.75);
+      backdrop-filter: blur(12px);
+      border: 1px solid var(--surface-border);
+      border-radius: 14px;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      transform-style: preserve-3d;
+      perspective: 1000px;
+      transition: border-color 0.35s ease, box-shadow 0.35s ease, transform 0.15s ease-out;
+      will-change: transform;
+    }
+
+    .card:hover {
+      border-color: rgba(212, 175, 55, 0.5);
+      box-shadow: 0 20px 45px -10px rgba(0, 0, 0, 0.9), 0 0 25px rgba(212, 175, 55, 0.12);
+    }
+
+    .card-img-box {
+      position: relative;
+      width: 100%;
+      height: 280px;
+      background: #191920;
+      overflow: hidden;
+    }
+
+    .card-img-box img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    .card:hover .card-img-box img {
+      transform: scale(1.06);
+    }
+
+    .edition-tag {
+      position: absolute;
+      top: 12px;
+      right: 12px;
+      background: rgba(9, 9, 12, 0.85);
+      backdrop-filter: blur(6px);
+      border: 1px solid rgba(212, 175, 55, 0.3);
+      color: var(--gold-light);
+      font-size: 0.7rem;
+      letter-spacing: 0.1em;
+      padding: 0.25rem 0.65rem;
+      border-radius: 4px;
+    }
+
+    .card-content {
+      padding: 1.5rem;
+      display: flex;
+      flex-direction: column;
+      flex-grow: 1;
+    }
+
+    .card-title {
+      font-size: 1.2rem;
+      color: #fff;
+      margin-bottom: 0.4rem;
+    }
+
+    .card-specs {
+      font-size: 0.82rem;
+      color: var(--text-muted);
+      margin-bottom: 1.2rem;
+      flex-grow: 1;
+      font-weight: 300;
+    }
+
+    .calculator-box {
+      background: rgba(13, 13, 18, 0.85);
+      border: 1px solid var(--surface-border);
+      border-radius: 8px;
+      padding: 0.9rem;
+      margin-bottom: 1.2rem;
+    }
+
+    .calc-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 0.6rem;
+    }
+
+    .calc-label {
+      font-size: 0.75rem;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      color: var(--text-muted);
+    }
+
+    .unit-price {
+      font-size: 0.88rem;
+      color: var(--text-muted);
+    }
+
+    .qty-picker {
+      display: inline-flex;
+      align-items: center;
+      background: #191922;
+      border: 1px solid var(--surface-border);
+      border-radius: 6px;
+      overflow: hidden;
+    }
+
+    .qty-btn {
+      background: transparent;
+      border: none;
+      color: var(--text-muted);
+      width: 30px;
+      height: 30px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.85rem;
+      transition: background 0.2s, color 0.2s;
+    }
+
+    .qty-btn:hover {
+      background: var(--surface-border);
+      color: #fff;
+    }
+
+    .qty-display {
+      width: 32px;
+      text-align: center;
+      font-size: 0.9rem;
+      font-weight: 600;
+      color: var(--gold-light);
+    }
+
+    .calc-total-row {
+      display: flex;
+      align-items: baseline;
+      justify-content: space-between;
+      border-top: 1px dashed rgba(255, 255, 255, 0.1);
+      padding-top: 0.6rem;
+    }
+
+    .total-price {
+      font-size: 1.35rem;
+      font-weight: 700;
+      color: var(--gold-primary);
+      transition: transform 0.2s ease;
+    }
+
+    .total-price.updated {
+      animation: popPrice 0.3s ease;
+    }
+
+    @keyframes popPrice {
+      0% { transform: scale(1); }
+      50% { transform: scale(1.1); color: #fff; }
+      100% { transform: scale(1); }
+    }
+
+    .card-btns {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 0.6rem;
+    }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.45rem;
+      font-size: 0.82rem;
+      font-weight: 600;
+      padding: 0.8rem 0.6rem;
+      border-radius: 6px;
+      cursor: pointer;
+      text-decoration: none;
+      border: none;
+      transition: all 0.25s ease;
+    }
+
+    .btn-wa {
+      background: rgba(37, 211, 102, 0.12);
+      color: var(--wa-green);
+      border: 1px solid rgba(37, 211, 102, 0.35);
+    }
+
+    .btn-wa:hover {
+      background: var(--wa-green);
+      color: #000;
+      box-shadow: 0 0 15px rgba(37, 211, 102, 0.4);
+    }
+
+    .btn-qr {
+      background: linear-gradient(135deg, var(--gold-primary), var(--gold-dark));
+      color: #000;
+    }
+
+    .btn-qr:hover {
+      filter: brightness(1.12);
+      box-shadow: 0 0 20px rgba(212, 175, 55, 0.5);
+    }
+
+    /* 🌟 COMPACT STRIPE AUTO-SLIDE TESTIMONIAL MARQUEE */
+    .patron-stripe-section {
+      background: rgba(9, 9, 13, 0.7);
+      backdrop-filter: blur(10px);
+      border-top: 1px solid var(--surface-border);
+      border-bottom: 1px solid var(--surface-border);
+      padding: 3.5rem 0;
+      overflow: hidden;
+      position: relative;
+    }
+
+    .patron-stripe-section::before,
+    .patron-stripe-section::after {
+      content: "";
+      position: absolute;
+      top: 0;
+      width: 140px;
+      height: 100%;
+      z-index: 2;
+      pointer-events: none;
+    }
+
+    .patron-stripe-section::before {
+      left: 0;
+      background: linear-gradient(to right, #070709, transparent);
+    }
+
+    .patron-stripe-section::after {
+      right: 0;
+      background: linear-gradient(to left, #070709, transparent);
+    }
+
+    .marquee-wrapper {
+      display: flex;
+      width: 100%;
+      overflow: hidden;
+      user-select: none;
+    }
+
+    .marquee-track {
+      display: flex;
+      gap: 1.5rem;
+      flex-shrink: 0;
+      animation: continuousScroll 28s linear infinite;
+    }
+
+    .marquee-wrapper:hover .marquee-track {
+      animation-play-state: paused;
+    }
+
+    @keyframes continuousScroll {
+      from { transform: translateX(0); }
+      to { transform: translateX(-100%); }
+    }
+
+    .stripe-card {
+      background: rgba(20, 20, 26, 0.85);
+      border: 1px solid rgba(212, 175, 55, 0.25);
+      border-radius: 12px;
+      padding: 1.1rem 1.4rem;
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      width: 440px;
+      flex-shrink: 0;
+      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.4);
+      transition: border-color 0.25s, transform 0.25s;
+    }
+
+    .stripe-card:hover {
+      border-color: var(--gold-primary);
+      transform: translateY(-2px);
+    }
+
+    .stripe-avatar {
+      width: 52px;
+      height: 52px;
+      border-radius: 50%;
+      object-fit: cover;
+      border: 2px solid var(--gold-primary);
+      flex-shrink: 0;
+    }
+
+    .stripe-details {
+      display: flex;
+      flex-direction: column;
+      flex-grow: 1;
+    }
+
+    .stripe-top {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 0.25rem;
+    }
+
+    .stripe-name {
+      font-size: 0.92rem;
+      color: #fff;
+      font-weight: 600;
+    }
+
+    .stripe-stars {
+      color: var(--gold-primary);
+      font-size: 0.72rem;
+    }
+
+    .stripe-role {
+      font-size: 0.72rem;
+      color: var(--gold-light);
+      margin-bottom: 0.4rem;
+    }
+
+    .stripe-text {
+      font-size: 0.8rem;
+      color: var(--text-muted);
+      line-height: 1.4;
+      display: -webkit-box;
+      -webkit-line-clamp: 2;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+    }
+
+    /* 🤝 ELEVATED OFFICIAL PARTNERS SECTION */
+    .partners-section {
+      background: rgba(14, 14, 18, 0.6);
+      padding: 5.5rem 0;
+      border-bottom: 1px solid var(--surface-border);
+    }
+
+    .partners-grid {
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
+      gap: 1.5rem;
+      margin-top: 3rem;
+    }
+
+    .partner-card {
+      background: linear-gradient(180deg, rgba(26, 26, 34, 0.65) 0%, rgba(16, 16, 21, 0.85) 100%);
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(212, 175, 55, 0.2);
+      border-radius: 14px;
+      padding: 2rem 1.2rem;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      gap: 1rem;
+      position: relative;
+      overflow: hidden;
+      transition: all 0.35s cubic-bezier(0.2, 1, 0.3, 1);
+    }
+
+    .partner-card:hover {
+      transform: translateY(-6px);
+      border-color: var(--gold-primary);
+      box-shadow: 0 15px 35px rgba(0, 0, 0, 0.8), 0 0 20px rgba(212, 175, 55, 0.2);
+    }
+
+    .partner-logo-box {
+      width: 72px;
+      height: 72px;
+      border-radius: 50%;
+      background: #111116;
+      border: 1px solid rgba(212, 175, 55, 0.3);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+      padding: 8px;
+    }
+
+    .partner-logo {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      border-radius: 50%;
+      filter: grayscale(1) brightness(1.2);
+      transition: filter 0.3s ease, transform 0.3s ease;
+    }
+
+    .partner-card:hover .partner-logo {
+      filter: grayscale(0) brightness(1.05);
+      transform: scale(1.08);
+    }
+
+    .partner-name {
+      font-size: 0.85rem;
+      font-weight: 600;
+      color: #fff;
+    }
+
+    .partner-cat {
+      font-size: 0.72rem;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--gold-light);
+    }
+
+    /* Trust, Narrative, Workspace & Bulk Sections */
+    .trust-section {
+      background: transparent;
+      border-bottom: 1px solid var(--surface-border);
+      padding: 5rem 0;
+    }
+
+    .trust-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 2rem;
+    }
+
+    .trust-card {
+      background: rgba(20, 20, 25, 0.7);
+      backdrop-filter: blur(10px);
+      border: 1px solid var(--surface-border);
+      border-radius: 12px;
+      padding: 2.2rem 1.8rem;
+      text-align: center;
+      transition: border-color 0.3s, transform 0.3s;
+    }
+
+    .trust-card:hover {
+      border-color: var(--gold-primary);
+      transform: translateY(-4px);
+    }
+
+    .trust-icon {
+      width: 56px;
+      height: 56px;
+      border-radius: 50%;
+      background: rgba(212, 175, 55, 0.1);
+      border: 1px solid rgba(212, 175, 55, 0.3);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 0 auto 1.2rem;
+      font-size: 1.4rem;
+      color: var(--gold-primary);
+    }
+
+    .trust-card h3 {
+      font-size: 1.15rem;
+      color: #fff;
+      margin-bottom: 0.6rem;
+    }
+
+    .trust-card p {
+      font-size: 0.85rem;
+      color: var(--text-muted);
+    }
+
+    .narrative-section {
+      padding: 6rem 0;
+    }
+
+    .story-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 4rem;
+      align-items: center;
+      margin-bottom: 6rem;
+    }
+
+    .story-img-box {
+      border-radius: 16px;
+      overflow: hidden;
+      border: 1px solid var(--surface-border);
+      box-shadow: 0 20px 40px rgba(0,0,0,0.6);
+    }
+
+    .story-img-box img {
+      width: 100%;
+      height: 100%;
+      display: block;
+      object-fit: cover;
+    }
+
+    .founder-quote {
+      border-left: 2px solid var(--gold-primary);
+      padding-left: 1.5rem;
+      margin: 1.5rem 0;
+      color: var(--gold-light);
+      font-size: 1.1rem;
+    }
+
+    .workspace-section {
+      background: rgba(9, 9, 12, 0.6);
+      padding: 6rem 0;
+      border-top: 1px solid var(--surface-border);
+    }
+
+    .workspace-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1.5rem;
+      margin-top: 3rem;
+    }
+
+    .workspace-card {
+      border-radius: 12px;
+      overflow: hidden;
+      border: 1px solid var(--surface-border);
+      background: rgba(20, 20, 25, 0.7);
+      backdrop-filter: blur(8px);
+    }
+
+    .workspace-card img {
+      width: 100%;
+      height: 230px;
+      object-fit: cover;
+      display: block;
+    }
+
+    .workspace-card-body {
+      padding: 1.4rem;
+    }
+
+    .workspace-card-body h4 {
+      font-size: 1.1rem;
+      color: #fff;
+      margin-bottom: 0.4rem;
+    }
+
+    .workspace-card-body p {
+      font-size: 0.82rem;
+      color: var(--text-muted);
+    }
+
+    .bulk-section {
+      padding: 6rem 0;
+    }
+
+    .bulk-card {
+      background: rgba(20, 20, 25, 0.8);
+      backdrop-filter: blur(14px);
+      border: 1px solid rgba(212, 175, 55, 0.35);
+      border-radius: 16px;
+      padding: 3.5rem 2.2rem;
+      max-width: 900px;
+      margin: 0 auto;
+      text-align: center;
+      box-shadow: 0 25px 60px rgba(0, 0, 0, 0.8);
+    }
+
+    .bulk-card h2 {
+      font-size: 2rem;
+      color: #fff;
+      margin-bottom: 1rem;
+    }
+
+    .bulk-card p {
+      color: var(--text-muted);
+      max-width: 620px;
+      margin: 0 auto 2rem;
+      font-size: 0.95rem;
+    }
+
+    .bulk-form-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1rem;
+      text-align: left;
+      margin-bottom: 1.2rem;
+    }
+
+    .form-group {
+      margin-bottom: 1rem;
+      text-align: left;
+    }
+
+    .form-label {
+      display: block;
+      font-size: 0.78rem;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--gold-light);
+      margin-bottom: 0.4rem;
+    }
+
+    .form-input {
+      width: 100%;
+      padding: 0.8rem 1rem;
+      background: #1a1a22;
+      border: 1px solid var(--surface-border);
+      border-radius: 6px;
+      color: #fff;
+      font-size: 0.9rem;
+      outline: none;
+    }
+
+    .form-input:focus {
+      border-color: var(--gold-primary);
+    }
+
+    /* Modal */
+    .modal-backdrop {
+      position: fixed;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.88);
+      backdrop-filter: blur(12px);
+      z-index: 10000;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: 1.5rem;
+    }
+
+    .modal-backdrop.active {
+      display: flex;
+    }
+
+    .modal-box {
+      background: #111116;
+      border: 1px solid var(--gold-dark);
+      border-radius: 16px;
+      width: 100%;
+      max-width: 520px;
+      max-height: 92vh;
+      overflow-y: auto;
+      padding: 2.2rem;
+      position: relative;
+      box-shadow: 0 30px 60px rgba(0, 0, 0, 0.9);
+    }
+
+    .modal-close {
+      position: absolute;
+      top: 1.2rem;
+      right: 1.2rem;
+      background: transparent;
+      border: none;
+      color: var(--text-muted);
+      font-size: 1.3rem;
+      cursor: pointer;
+    }
+
+    .modal-close:hover {
+      color: #fff;
+    }
+
+    .modal-qr-wrap {
+      background: #ffffff;
+      padding: 1.2rem;
+      border-radius: 12px;
+      display: inline-block;
+      margin: 1rem auto;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.5);
+    }
+
+    .modal-qr-wrap img {
+      width: 190px;
+      height: 190px;
+      display: block;
+    }
+
+    .upi-tag {
+      background: rgba(212, 175, 55, 0.08);
+      border: 1px dashed var(--gold-primary);
+      border-radius: 6px;
+      padding: 0.6rem;
+      font-size: 0.85rem;
+      color: var(--gold-light);
+      margin: 0.8rem 0 1.2rem;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.5rem;
+    }
+
+    /* Footer */
+    footer {
+      background: rgba(4, 4, 6, 0.95);
+      border-top: 1px solid var(--surface-border);
+      padding: 4.5rem 0 2.5rem;
+      font-size: 0.85rem;
+      color: var(--text-muted);
+    }
+
+    .footer-grid {
+      display: grid;
+      grid-template-columns: 2fr 1fr 1fr;
+      gap: 3rem;
+      margin-bottom: 3rem;
+    }
+
+    .footer-col h4 {
+      color: #fff;
+      font-size: 0.95rem;
+      margin-bottom: 1.2rem;
+    }
+
+    .footer-col ul {
+      list-style: none;
+    }
+
+    .footer-col ul li {
+      margin-bottom: 0.6rem;
+    }
+
+    .footer-col ul li a {
+      color: var(--text-muted);
+      text-decoration: none;
+      transition: color 0.2s;
+    }
+
+    .footer-col ul li a:hover {
+      color: var(--gold-light);
+    }
+
+    .footer-bottom {
+      border-top: 1px solid var(--surface-border);
+      padding-top: 2rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 1rem;
+      font-size: 0.8rem;
+    }
+
+    @media (max-width: 990px) {
+      .partners-grid { grid-template-columns: repeat(3, 1fr); }
+      .story-grid { grid-template-columns: 1fr; gap: 2.5rem; }
+      .workspace-grid { grid-template-columns: 1fr; }
+      .bulk-form-grid { grid-template-columns: 1fr; }
+      .footer-grid { grid-template-columns: 1fr; gap: 2rem; }
+      .nav-links { display: none; }
+      .wa-tooltip { display: none; }
+      .video-viewport { height: 380px; }
+      .stripe-card { width: 340px; }
+      .cursor-dot, .cursor-ring, #cursorCanvas, .mouse-ambient-spotlight { display: none !important; }
+    }
+
+    @media (max-width: 600px) {
+      .partners-grid { grid-template-columns: repeat(2, 1fr); }
+      .video-caption-overlay { display: none; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ⏳ ATELIER HAUTE PRELOADER -->
+  <div id="preloader">
+    <div class="preloader-crest">
+      <div class="preloader-ring-outer"></div>
+      <div class="preloader-ring-inner"></div>
+      <i class="fa-solid fa-crown preloader-icon"></i>
+    </div>
+    <div class="preloader-brand">Elite<span>bags</span></div>
+    <div class="preloader-tagline">Haute Maroquinerie &bull; Atelier Privé</div>
+    <div class="preloader-bar-wrap">
+      <div class="preloader-bar-fill" id="preloaderBar"></div>
+    </div>
+    <div class="preloader-counter" id="preloaderCounter">0%</div>
+  </div>
+
+  <!-- ✨ AMBIENT BACKGROUND & MOUSE TRACKING LAYERS -->
+  <div class="ambient-background-layer" aria-hidden="true">
+    <div class="ambient-grid"></div>
+    <div class="glow-orb glow-orb-1"></div>
+    <div class="glow-orb glow-orb-2"></div>
+    <div class="glow-orb glow-orb-3"></div>
+  </div>
+
+  <!-- Interactive Dual Magnetic Cursor Rings -->
+  <div class="cursor-dot" id="cursorDot"></div>
+  <div class="cursor-ring" id="cursorRing"></div>
+  <div class="mouse-ambient-spotlight" id="mouseSpotlight"></div>
+  
+  <!-- Canvas for Liquid Stardust Mouse Trail -->
+  <canvas id="cursorCanvas"></canvas>
+
+  <!-- SITE CONTENT WRAPPER -->
+  <div class="site-content">
+
+    <!-- Top Announcement Strip -->
+    <div class="top-strip">
+      Armored Express Courier &bull; Insured Dispatches &bull; Instant Verified UPI Settlement
+    </div>
+
+    <!-- Header -->
+    <header>
+      <div class="container navbar">
+        <a href="#" class="brand">
+          <span class="brand-title serif">ELITE<span>BAGS</span></span>
+          <span class="brand-sub">Atelier de Haute Maroquinerie</span>
+        </a>
+
+        <nav class="nav-links">
+          <a href="#craft-film">The Film</a>
+          <a href="#catalog">Collection</a>
+          <a href="#patrons">Patron Reviews</a>
+          <a href="#partners">Our Partners</a>
+          <a href="#about">About Atelier</a>
+          <a href="#bulk">Corporate Bulk</a>
+        </nav>
+
+        <a href="https://wa.me/919876543210" target="_blank" class="nav-concierge-btn">
+          <i class="fa-brands fa-whatsapp" style="color: var(--wa-green); font-size: 1rem;"></i>
+          <span>Concierge Desk</span>
+        </a>
+      </div>
+    </header>
+
+    <!-- Hero -->
+    <section class="hero">
+      <div class="container">
+        <span class="eyebrow serif">Handcrafted In Small Batches</span>
+        <h1 class="hero-title serif shimmer-sweep">Perfection in Every Stitched Seam</h1>
+        <p class="hero-desc">
+          Ten master compositions crafted from premium vegetable-tanned leathers, solid brass hardware, and hand-burnished edges. Built for distinguished journeys.
+        </p>
+
+        <div class="hero-badges">
+          <div class="hero-badge-item">
+            <i class="fa-solid fa-shield-halved"></i>
+            <span>100% Encrypted UPI Transact</span>
+          </div>
+          <div class="hero-badge-item">
+            <i class="fa-solid fa-truck-fast"></i>
+            <span>Sealed Armored Air Transit</span>
+          </div>
+          <div class="hero-badge-item">
+            <i class="fa-solid fa-certificate"></i>
+            <span>Numbered Certificate of Craft</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 🎬 BIG SIZE AUTOPLAY VIDEO (PLACED BEFORE "CURATED LIMITED BATCH") -->
+    <section class="cinematic-video-section" id="craft-film">
+      <div class="container">
+        <div class="video-viewport">
+          <video id="atelierVideo" autoplay muted loop playsinline preload="auto" poster="https://images.unsplash.com/photo-1590874103328-eac38a683ce7?auto=format&fit=crop&w=1400&q=80">
+            <source src="https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerBlazes.mp4" type="video/mp4">
+            Your browser does not support the video tag.
+          </video>
+
+          <div class="video-caption-overlay">
+            <span class="eyebrow" style="margin-bottom: 0.3rem;">Workshop Tape No. 04</span>
+            <h3 class="serif">Vegetable-Tanned Saddle Assembly</h3>
+            <p>Every single cut is scored by hand with millimeter tolerance before receiving twin-needle waxed saddle stitching.</p>
+          </div>
+
+          <div class="video-controls-overlay">
+            <button type="button" class="vid-ctrl-btn" id="soundToggleBtn" onclick="toggleVideoSound()">
+              <i class="fa-solid fa-volume-xmark" id="soundIcon"></i>
+              <span id="soundText">Unmute Sound</span>
+            </button>
+            <button type="button" class="vid-ctrl-btn" id="playToggleBtn" onclick="toggleVideoPlayback()">
+              <i class="fa-solid fa-pause" id="playIcon"></i>
+              <span id="playText">Pause</span>
+            </button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 10 Products Catalog with Live Price Calculation -->
+    <section class="catalog-section" id="catalog">
+      <div class="container">
+        <div class="section-title-wrap">
+          <span class="eyebrow serif">Curated Limited Batch</span>
+          <h2 class="section-title serif">The Signature 10 Editions</h2>
+          <p class="section-subtitle">Adjust item quantities to see instant price calculations, scan UPI QR for instant order logging, or speak directly to our concierge.</p>
+        </div>
+
+        <div class="products-grid" id="productGrid">
+          <!-- 10 Products generated via JavaScript -->
+        </div>
+      </div>
+    </section>
+
+    <!-- 🌟 CUSTOMER REVIEWS (SMALL STRIPE CONTINUOUS AUTO-SLIDE LOOP) -->
+    <section class="patron-stripe-section" id="patrons">
+      <div class="container" style="margin-bottom: 1.2rem; text-align: center;">
+        <span class="eyebrow serif" style="margin-bottom: 0.2rem;">Live Patron Feedback</span>
+        <h3 class="serif" style="font-size: 1.3rem; color: #fff;">Words from Our Connoisseurs</h3>
+      </div>
+
+      <div class="marquee-wrapper">
+        <div class="marquee-track" id="marqueeTrack1"></div>
+        <div class="marquee-track" id="marqueeTrack2" aria-hidden="true"></div>
+      </div>
+    </section>
+
+    <!-- 🤝 OFFICIAL PARTNERS SECTION (5 ENHANCED METALLIC CARDS) -->
+    <section class="partners-section" id="partners">
+      <div class="container">
+        <div class="section-title-wrap" style="margin-bottom: 1.5rem;">
+          <span class="eyebrow serif">Alliances of Excellence</span>
+          <h2 class="section-title serif">Our 5 Official Atelier Partners</h2>
+          <p class="section-subtitle">Collaborating with the world's most distinguished supply chains, tanneries, and logistics carriers.</p>
+        </div>
+
+        <div class="partners-grid" id="partnersGrid">
+          <!-- 5 Official Partners generated via JavaScript -->
+        </div>
+      </div>
+    </section>
+
+    <!-- Courier & Secure Payment Features -->
+    <section class="trust-section" id="trust">
+      <div class="container">
+        <div class="section-title-wrap" style="margin-bottom: 2.5rem;">
+          <span class="eyebrow serif">Impeccable Standards</span>
+          <h2 class="section-title serif">Courier Excellence &amp; Payment Integrity</h2>
+        </div>
+
+        <div class="trust-grid">
+          <div class="trust-card">
+            <div class="trust-icon"><i class="fa-solid fa-truck-ramp-box"></i></div>
+            <h3 class="serif">Armored Express Couriers</h3>
+            <p>Dispatched exclusively through BlueDart Apex and DHL Air Express in tamper-proof waterproof wax casings with live GPS tracking.</p>
+          </div>
+
+          <div class="trust-card">
+            <div class="trust-icon"><i class="fa-solid fa-fingerprint"></i></div>
+            <h3 class="serif">Zero-Breach UPI Transact</h3>
+            <p>Direct banking-grade VPA routing via your native banking app. No middleman storage of card credentials, zero third-party leakage.</p>
+          </div>
+
+          <div class="trust-card">
+            <div class="trust-icon"><i class="fa-solid fa-box-open"></i></div>
+            <h3 class="serif">Double Inspection Protocol</h3>
+            <p>Each leather bag is conditioned, inspected under 5,000K neutral light, serialized, and hand-signed by the head artisan before sealing.</p>
+          </div>
+
+          <div class="trust-card">
+            <div class="trust-icon"><i class="fa-solid fa-shield-cat"></i></div>
+            <h3 class="serif">Full In-Transit Insurance</h3>
+            <p>Every parcel is fully underwritten until the signature receipt is confirmed by you at your doorstep.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Narrative Section: About & Founder -->
+    <section class="narrative-section" id="about">
+      <div class="container">
+        <div class="story-grid">
+          <div>
+            <span class="eyebrow serif">The Atelier Heritage</span>
+            <h2 class="section-title serif" style="text-align: left; margin-bottom: 1.2rem;">Craft Without Compromise</h2>
+            <p style="color: var(--text-muted); margin-bottom: 1rem;">
+              Elitebags was established with a singular obsession: to rescue fine leathercraft from mass assembly lines and bring back slow, intentional maroquinerie.
+            </p>
+            <p style="color: var(--text-muted); margin-bottom: 1.5rem;">
+              Every hide is hand-selected from certified ethical tanneries using natural bark tannins rather than synthetic chromium salts. The result is leather that does not wear out—it patinas into a personal archive of your travels.
+            </p>
+            <div style="display: flex; gap: 2rem;">
+              <div>
+                <p class="serif" style="font-size: 1.8rem; color: var(--gold-primary);">100%</p>
+                <p style="font-size: 0.8rem; color: var(--text-muted);">Vegetable-Tanned</p>
+              </div>
+              <div>
+                <p class="serif" style="font-size: 1.8rem; color: var(--gold-primary);">48 hrs</p>
+                <p style="font-size: 0.8rem; color: var(--text-muted);">Handcraft Per Piece</p>
+              </div>
+              <div>
+                <p class="serif" style="font-size: 1.8rem; color: var(--gold-primary);">10-Yr</p>
+                <p style="font-size: 0.8rem; color: var(--text-muted);">Structural Warranty</p>
+              </div>
+            </div>
+          </div>
+          <div class="story-img-box">
+            <img src="https://images.unsplash.com/photo-1590874103328-eac38a683ce7?auto=format&fit=crop&w=800&q=80" alt="Leathercraft Workbench">
+          </div>
+        </div>
+
+        <!-- Founder Section -->
+        <div class="story-grid" id="founder" style="margin-bottom: 0;">
+          <div class="story-img-box">
+            <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=800&q=80" alt="Founder Portrait">
+          </div>
+          <div>
+            <span class="eyebrow serif">The Master Craftsman</span>
+            <h2 class="section-title serif" style="text-align: left; margin-bottom: 1.2rem;">A Letter From The Founder</h2>
+            <p class="founder-quote italic-serif">
+              "A bag is not merely an accessory; it is the silent companion that carries your work, ambitions, and journeys. If it doesn’t outlive the decade, we have failed our craft."
+            </p>
+            <p style="color: var(--text-muted); margin-bottom: 1rem;">
+              With over 18 years spent studying classical saddle-making in Florence and heritage workshop techniques, I founded Elitebags to offer connoisseurs bags that bridge historical saddlery with modern executive demands.
+            </p>
+            <p style="color: var(--gold-light); font-weight: 600;">
+              — V. C. Beaumont, Master Artisan &amp; Founder
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Environment & Workspace -->
+    <section class="workspace-section" id="workspace">
+      <div class="container">
+        <div class="section-title-wrap">
+          <span class="eyebrow serif">The Physical Atelier</span>
+          <h2 class="section-title serif">The Workshop Environment</h2>
+          <p class="section-subtitle">A climate-calibrated studio where traditional wood forms meet micro-stitch precision machinery.</p>
+        </div>
+
+        <div class="workspace-grid">
+          <div class="workspace-card">
+            <img src="https://images.unsplash.com/photo-1544816155-12df9643f363?auto=format&fit=crop&w=600&q=80" alt="Cutting Station">
+            <div class="workspace-card-body">
+              <h4 class="serif">Precision Cutting Table</h4>
+              <p>Every leather panel is inspected for grain uniformity and skived by hand to prevent edge bulkiness.</p>
+            </div>
+          </div>
+
+          <div class="workspace-card">
+            <img src="https://images.unsplash.com/photo-1584917865442-de89df76afd3?auto=format&fit=crop&w=600&q=80" alt="Edge Burnishing Station">
+            <div class="workspace-card-body">
+              <h4 class="serif">Organic Beeswax Burnishing</h4>
+              <p>Edges undergo four coats of natural Italian edge ink and hot beeswax friction finishing for water resistance.</p>
+            </div>
+          </div>
+
+          <div class="workspace-card">
+            <img src="https://images.unsplash.com/photo-1553062407-98eeb64c6a62?auto=format&fit=crop&w=600&q=80" alt="Final Assembly">
+            <div class="workspace-card-body">
+              <h4 class="serif">Hardware &amp; Assembly</h4>
+              <p>Solid forged brass rivets and German poly-core thread ensure zero mechanical failures under heavy load.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Bulk & Corporate Orders -->
+    <section class="bulk-section" id="bulk">
+      <div class="container">
+        <div class="bulk-card">
+          <span class="eyebrow serif">Private Commissions</span>
+          <h2 class="serif">Bulk &amp; Corporate Bespoke Gifting</h2>
+          <p>
+            Looking to commission 5 to 500 numbered bags for executive summits, high-table board retreats, or custom monogrammed client gifting? Dispatch your inquiry directly to our corporate director.
+          </p>
+
+          <form id="bulkForm" onsubmit="handleBulkDispatch(event)">
+            <div class="bulk-form-grid">
+              <div class="form-group">
+                <label class="form-label">Corporate / Representative Name</label>
+                <input type="text" id="bulkName" class="form-input" placeholder="e.g. Sterling Capital Group" required>
+              </div>
+              <div class="form-group">
+                <label class="form-label">WhatsApp Contact Number</label>
+                <input type="tel" id="bulkPhone" class="form-input" placeholder="+91 98765 00000" required>
+              </div>
+              <div class="form-group">
+                <label class="form-label">Estimated Quantity (Min. 5 units)</label>
+                <input type="number" id="bulkQty" class="form-input" min="5" value="10" required>
+              </div>
+              <div class="form-group">
+                <label class="form-label">Interested Edition / Model</label>
+                <input type="text" id="bulkModel" class="form-input" placeholder="e.g. Sovereign Briefcase" required>
+              </div>
+            </div>
+            <div class="form-group">
+              <label class="form-label">Customization Notes</label>
+              <textarea id="bulkNotes" class="form-input" rows="2" placeholder="Tell us about debossing or delivery timeline..."></textarea>
+            </div>
+            <button type="submit" class="btn btn-wa" style="width: 100%; max-width: 380px; margin: 0 auto; padding: 1rem;">
+              <i class="fa-brands fa-whatsapp"></i> Inquire Corporate Rates on WhatsApp
+            </button>
+          </form>
+        </div>
+      </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+      <div class="container">
+        <div class="footer-grid">
+          <div>
+            <span class="serif" style="color: #fff; font-size: 1.3rem; font-weight: 700;">ELITEBAGS</span>
+            <p style="font-size: 0.85rem; color: var(--text-muted); margin-top: 0.8rem; max-width: 380px;">
+              Handcrafted leather goods preserved by heirloom craftsmanship. Certified raw vegetable leathers and zero-intermediary direct atelier purchase.
+            </p>
+          </div>
+
+          <div class="footer-col">
+            <h4 class="serif">Atelier Navigation</h4>
+            <ul>
+              <li><a href="#craft-film">The Film</a></li>
+              <li><a href="#catalog">The 10 Editions</a></li>
+              <li><a href="#patrons">Patron Reviews</a></li>
+              <li><a href="#partners">Our 5 Partners</a></li>
+              <li><a href="#bulk">Corporate Bulk Commissions</a></li>
+            </ul>
+          </div>
+
+          <div class="footer-col">
+            <h4 class="serif">Safety &amp; Compliance</h4>
+            <ul>
+              <li><a href="javascript:void(0)">Tamper-Proof Courier Charter</a></li>
+              <li><a href="javascript:void(0)">UPI Direct Settlement Norms</a></li>
+              <li><a href="javascript:void(0)">10-Year Stitch Warranty</a></li>
+              <li><a href="javascript:void(0)">Dispute &amp; Exchange Terms</a></li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="footer-bottom">
+          <p>&copy; 2026 Elitebags Atelier Ltd. All master compositions reserved.</p>
+          <p style="color: var(--gold-light);">Encrypted Ledger &bull; Real-time UPI QR &bull; Direct Verified Dispatch</p>
+        </div>
+      </div>
+    </footer>
+
+    <!-- Fixed Bottom Corner WhatsApp Floating Button -->
+    <div class="wa-float-container">
+      <div class="wa-tooltip">
+        <span>Chat with Atelier Concierge</span>
+      </div>
+      <a href="https://wa.me/919876543210?text=Hello%20Elitebags%20Atelier%2C%20I%20would%20like%20assistance%20with%20an%20order." target="_blank" class="wa-float-btn" aria-label="WhatsApp Concierge Support">
+        <i class="fa-brands fa-whatsapp"></i>
+        <span class="wa-ping-dot"></span>
+      </a>
+    </div>
+
+  </div><!-- /site-content -->
+
+  <!-- Instant UPI QR Checkout Modal -->
+  <div class="modal-backdrop" id="checkoutModal">
+    <div class="modal-box">
+      <button class="modal-close" onclick="closeCheckout()"><i class="fa-solid fa-xmark"></i></button>
+      
+      <div style="text-align: center;">
+        <span class="eyebrow serif">Direct Atelier Transact</span>
+        <h3 class="serif" style="color: var(--gold-light); font-size: 1.35rem; margin-bottom: 0.3rem;">Armored UPI Checkout</h3>
+        <p style="font-size: 0.88rem; color: var(--text-muted);" id="modalSummary">Loading invoice...</p>
+
+        <div class="modal-qr-wrap">
+          <img id="upiQrCodeImg" src="" alt="Scan UPI QR">
+        </div>
+
+        <div class="upi-tag" onclick="copyUpi()" title="Click to copy UPI ID">
+          <i class="fa-regular fa-copy"></i>
+          <span>VPA: <strong id="vpaDisplay">elitebags@upi</strong></span>
+        </div>
+
+        <p style="font-size: 0.78rem; color: var(--text-muted); margin-bottom: 1.4rem;">
+          Compatible with GPay, PhonePe, Paytm, or BHIM. After paying, submit your reference below to register in Google Sheets &amp; notify the atelier dispatch team.
+        </p>
+      </div>
+
+      <form id="checkoutForm" onsubmit="handleCheckoutSubmit(event)">
+        <div class="form-group">
+          <label class="form-label">Full Name</label>
+          <input type="text" id="buyerName" class="form-input" placeholder="e.g. Julian Montgomery" required>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">WhatsApp Contact Number</label>
+          <input type="tel" id="buyerPhone" class="form-input" placeholder="+91 98765 43210" required>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">Delivery Destination (Address, Landmark, PIN)</label>
+          <textarea id="buyerAddress" class="form-input" rows="2" placeholder="Full postal delivery address" required></textarea>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">12-Digit UPI Transaction / UTR Number</label>
+          <input type="text" id="buyerUtr" class="form-input" placeholder="e.g. 4089XXXXXXXX" required>
+        </div>
+
+        <button type="submit" class="btn btn-qr" style="width: 100%; padding: 0.95rem; margin-top: 0.4rem;" id="submitBtn">
+          <i class="fa-solid fa-lock"></i> Register Order &amp; Dispatch to WhatsApp
+        </button>
+      </form>
+    </div>
+  </div>
+
+  <script>
+    // =========================================================================
+    // ⏳ 0. PRELOADER CONTROLLER
+    // =========================================================================
+    const preloaderBar = document.getElementById('preloaderBar');
+    const preloaderCounter = document.getElementById('preloaderCounter');
+    const preloader = document.getElementById('preloader');
+
+    let loadProgress = 0;
+    const progressInterval = setInterval(() => {
+      loadProgress += Math.floor(Math.random() * 15) + 8;
+      if (loadProgress > 90) {
+        clearInterval(progressInterval);
+      } else {
+        if (preloaderBar) preloaderBar.style.width = `${loadProgress}%`;
+        if (preloaderCounter) preloaderCounter.innerText = `${loadProgress}%`;
+      }
+    }, 90);
+
+    window.addEventListener('load', () => {
+      clearInterval(progressInterval);
+      if (preloaderBar) preloaderBar.style.width = '100%';
+      if (preloaderCounter) preloaderCounter.innerText = '100%';
+      
+      setTimeout(() => {
+        if (preloader) preloader.classList.add('loaded');
+      }, 450);
+    });
+
+    // Fallback: Dismiss preloader after 3.5s even if slow network
+    setTimeout(() => {
+      if (preloader && !preloader.classList.contains('loaded')) {
+        preloader.classList.add('loaded');
+      }
+    }, 3500);
+
+    // =========================================================================
+    // ⚙️ 1. EASY IMAGE & CONFIGURATION ZONE (REPLACE WITH YOUR .webp FILES HERE)
+    // =========================================================================
+    const CONFIG = {
+      ADMIN_PHONE: "919876543210",       // Replace with your real WhatsApp number
+      UPI_ID: "elitebags@upi",           // Replace with your merchant UPI VPA
+      PAYEE_NAME: "Elitebags Atelier",
+      // PASTE YOUR DEPLOYED GOOGLE APPS SCRIPT URL HERE:
+      GOOGLE_SHEET_WEBHOOK_URL: "https://script.google.com/macros/s/YOUR_SCRIPT_ID/exec"
+    };
+
+    // Exactly 10 Master Bag Editions
+    const PRODUCTS = [
+      {
+        id: 1,
+        title: "Monarch Weekender Duffel",
+        price: 18500,
+        specs: "Vegetable-tanned full-grain cowhide, brass zippers, 45L",
+        img: "https://images.unsplash.com/photo-1553062407-98eeb64c6a62?auto=format&fit=crop&w=700&q=80"
+      },
+      {
+        id: 2,
+        title: "Sovereign Executive Briefcase",
+        price: 16200,
+        specs: "Structured calfskin, padded 16\" laptop sleeve, lock closure",
+        img: "https://images.unsplash.com/photo-1548036328-c9fa89d128fa?auto=format&fit=crop&w=700&q=80"
+      },
+      {
+        id: 3,
+        title: "Palermo Classic Tote",
+        price: 12900,
+        specs: "Pebbled Italian leather, gold hardware, open-top magnetic latch",
+        img: "https://images.unsplash.com/photo-1584917865442-de89df76afd3?auto=format&fit=crop&w=700&q=80"
+      },
+      {
+        id: 4,
+        title: "Atelier Urban Rucksack",
+        price: 14500,
+        specs: "Waxed canvas & bridle leather trims, ergonomic dual straps",
+        img: "https://images.unsplash.com/photo-1622560480605-d83c853bc5c3?auto=format&fit=crop&w=700&q=80"
+      },
+      {
+        id: 5,
+        title: "Vendôme Crossbody Satchel",
+        price: 9800,
+        specs: "Saddle silhouette, burnished edges, adjustable strap",
+        img: "https://images.unsplash.com/photo-1590874103328-eac38a683ce7?auto=format&fit=crop&w=700&q=80"
+      },
+      {
+        id: 6,
+        title: "Nocturne Leather Clutch",
+        price: 8400,
+        specs: "Fine nappa lambskin, detachable brass chain, card slots",
+        img: "https://images.unsplash.com/photo-1566150905458-1bf1fc113f0d?auto=format&fit=crop&w=700&q=80"
+      },
+      {
+        id: 7,
+        title: "Vanguard Minimalist Sling",
+        price: 7600,
+        specs: "Weather-resistant matte leather, hidden security pockets",
+        img: "https://images.unsplash.com/photo-1544816155-12df9643f363?auto=format&fit=crop&w=700&q=80"
+      },
+      {
+        id: 8,
+        title: "Elysian Bucket Handbag",
+        price: 11400,
+        specs: "Drawstring bridle leather, suede interior lining, key fob",
+        img: "https://images.unsplash.com/photo-1591561954557-26941169b49e?auto=format&fit=crop&w=700&q=80"
+      },
+      {
+        id: 9,
+        title: "Aero Compact Dopp Kit",
+        price: 4900,
+        specs: "Waterproof lining, twin-zipper closure, travel-size organizer",
+        img: "https://images.unsplash.com/photo-1600857544200-b2f666a9a2ec?auto=format&fit=crop&w=700&q=80"
+      },
+      {
+        id: 10,
+        title: "Imperial Travel Trunk Duffel",
+        price: 24000,
+        specs: "Reinforced corners, TSA brass lock, ultra-high capacity 60L",
+        img: "https://images.unsplash.com/photo-1578632767115-351597cf2477?auto=format&fit=crop&w=700&q=80"
+      }
+    ];
+
+    // Happy Patrons Reviews
+    const PATRONS = [
+      {
+        name: "Devon Vance",
+        role: "Private Equity, Mumbai",
+        comment: "The Sovereign Briefcase carries quiet authority. The leather aroma and solid brass latch feel like a bespoke commission.",
+        avatar: "https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=150&q=80"
+      },
+      {
+        name: "Dr. Alistair Sterling",
+        role: "Architect, Bengaluru",
+        comment: "Three continents in four months and the Weekender Duffel has gained the most astonishing natural patina.",
+        avatar: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=150&q=80"
+      },
+      {
+        name: "Meera Singhania",
+        role: "Creative Director, New Delhi",
+        comment: "The Palermo Tote is pure precision. WhatsApp concierge confirmed dispatch in 10 minutes flat.",
+        avatar: "https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?auto=format&fit=crop&w=150&q=80"
+      },
+      {
+        name: "Rohan Kulkarni",
+        role: "Automotive Designer, Pune",
+        comment: "Waxed thread symmetry and edges burnished with hot beeswax. An absolute benchmark of heirloom leathercraft.",
+        avatar: "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&w=150&q=80"
+      },
+      {
+        name: "Ananya Deshmukh",
+        role: "Senior Partner, Hyderabad",
+        comment: "The bucket bag is featherweight yet structured. Beautiful packaging with numbered seal.",
+        avatar: "https://images.unsplash.com/photo-1544005313-94ddf0286df2?auto=format&fit=crop&w=150&q=80"
+      }
+    ];
+
+    // Exactly 5 Official Partners
+    const PARTNERS = [
+      {
+        name: "Tuscan Tannery Consortium",
+        category: "Raw Vegetable Leathers",
+        logo: "https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?auto=format&fit=crop&w=260&q=80"
+      },
+      {
+        name: "BlueDart Apex Express",
+        category: "Armored Air Transit",
+        logo: "https://images.unsplash.com/photo-1586528116311-ad8dd3c8310d?auto=format&fit=crop&w=260&q=80"
+      },
+      {
+        name: "National Payments (NPCI)",
+        category: "Direct UPI Routing",
+        logo: "https://images.unsplash.com/photo-1563013544-824ae1b704d3?auto=format&fit=crop&w=260&q=80"
+      },
+      {
+        name: "Guermann Threadworks",
+        category: "German Poly-Core Thread",
+        logo: "https://images.unsplash.com/photo-1579783902614-a3fb3927b675?auto=format&fit=crop&w=260&q=80"
+      },
+      {
+        name: "Castelvetro Hardware",
+        category: "Solid Brass Foundry",
+        logo: "https://images.unsplash.com/photo-1518770660439-4636190af475?auto=format&fit=crop&w=260&q=80"
+      }
+    ];
+
+    // =========================================================================
+    // 🛍️ 2. STORE ENGINE & DYNAMIC PRICE CALCULATION
+    // =========================================================================
+    const quantities = {};
+    let activeProduct = null;
+
+    function renderProducts() {
+      const grid = document.getElementById("productGrid");
+      grid.innerHTML = PRODUCTS.map((item, idx) => {
+        if (!quantities[item.id]) quantities[item.id] = 1;
+        const currentQty = quantities[item.id];
+        const currentTotal = item.price * currentQty;
+
+        return `
+          <div class="card" onmousemove="tiltCard(event, this)" onmouseleave="resetCard(this)">
+            <div class="card-img-box">
+              <img src="${item.img}" alt="${item.title}" loading="lazy">
+              <span class="edition-tag serif">Edition ${String(idx + 1).padStart(2, '0')}/10</span>
+            </div>
+            <div class="card-content">
+              <h3 class="card-title serif">${item.title}</h3>
+              <p class="card-specs">${item.specs}</p>
+
+              <div class="calculator-box">
+                <div class="calc-row">
+                  <span class="calc-label">Unit Price</span>
+                  <span class="unit-price">₹${item.price.toLocaleString('en-IN')}</span>
+                </div>
+
+                <div class="calc-row">
+                  <span class="calc-label">Select Quantity</span>
+                  <div class="qty-picker">
+                    <button type="button" class="qty-btn" onclick="modifyQuantity(${item.id}, -1)">
+                      <i class="fa-solid fa-minus"></i>
+                    </button>
+                    <span class="qty-display" id="qty-val-${item.id}">${currentQty}</span>
+                    <button type="button" class="qty-btn" onclick="modifyQuantity(${item.id}, 1)">
+                      <i class="fa-solid fa-plus"></i>
+                    </button>
+                  </div>
+                </div>
+
+                <div class="calc-total-row">
+                  <span class="calc-label" style="color: var(--gold-light); font-weight:600;">Calculated Subtotal</span>
+                  <span class="total-price" id="total-val-${item.id}">₹${currentTotal.toLocaleString('en-IN')}</span>
+                </div>
+              </div>
+
+              <div class="card-btns">
+                <button class="btn btn-wa" onclick="orderWhatsAppDirect(${item.id})">
+                  <i class="fa-brands fa-whatsapp"></i> Buy via WA
+                </button>
+                <button class="btn btn-qr" onclick="openQrCheckout(${item.id})">
+                  <i class="fa-solid fa-qrcode"></i> Buy via QR
+                </button>
+              </div>
+            </div>
+          </div>
+        `;
+      }).join('');
+    }
+
+    function modifyQuantity(productId, change) {
+      const product = PRODUCTS.find(p => p.id === productId);
+      if (!product) return;
+
+      let current = quantities[productId] || 1;
+      let next = current + change;
+
+      if (next < 1) next = 1;
+      if (next > 20) next = 20;
+
+      quantities[productId] = next;
+
+      const qtyEl = document.getElementById(`qty-val-${productId}`);
+      if (qtyEl) qtyEl.innerText = next;
+
+      const totalEl = document.getElementById(`total-val-${productId}`);
+      if (totalEl) {
+        const calculatedPrice = product.price * next;
+        totalEl.innerText = `₹${calculatedPrice.toLocaleString('en-IN')}`;
+        totalEl.classList.remove('updated');
+        void totalEl.offsetWidth;
+        totalEl.classList.add('updated');
+      }
+    }
+
+    function orderWhatsAppDirect(productId) {
+      const item = PRODUCTS.find(p => p.id === productId);
+      if (!item) return;
+
+      const qty = quantities[productId] || 1;
+      const total = item.price * qty;
+
+      const text = `*New Order Reservation — Elitebags Atelier*\n\n` +
+                   `• Product: ${item.title}\n` +
+                   `• Quantity: ${qty}\n` +
+                   `• Unit Price: ₹${item.price.toLocaleString('en-IN')}\n` +
+                   `• Calculated Total: ₹${total.toLocaleString('en-IN')}\n\n` +
+                   `Hello Atelier Concierge, I would like to reserve this order. Please guide me with delivery and payment verification.`;
+
+      const url = `https://wa.me/${CONFIG.ADMIN_PHONE}?text=${encodeURIComponent(text)}`;
+      window.open(url, '_blank');
+    }
+
+    function openQrCheckout(productId) {
+      activeProduct = PRODUCTS.find(p => p.id === productId);
+      if (!activeProduct) return;
+
+      const qty = quantities[productId] || 1;
+      const totalVal = activeProduct.price * qty;
+
+      document.getElementById("modalSummary").innerText = 
+        `${activeProduct.title} (x${qty}) — Total: ₹${totalVal.toLocaleString('en-IN')}`;
+
+      const upiUrl = `upi://pay?pa=${CONFIG.UPI_ID}&pn=${encodeURIComponent(CONFIG.PAYEE_NAME)}&am=${totalVal}&cu=INR&tn=${encodeURIComponent('Elitebags Order ' + activeProduct.title)}`;
+      const qrApi = `https://api.qrserver.com/v1/create-qr-code/?size=250x250&data=${encodeURIComponent(upiUrl)}`;
+
+      document.getElementById("upiQrCodeImg").src = qrApi;
+      document.getElementById("vpaDisplay").innerText = CONFIG.UPI_ID;
+      document.getElementById("checkoutModal").classList.add("active");
+    }
+
+    function closeCheckout() {
+      document.getElementById("checkoutModal").classList.remove("active");
+    }
+
+    function copyUpi() {
+      navigator.clipboard.writeText(CONFIG.UPI_ID);
+      alert("UPI VPA copied: " + CONFIG.UPI_ID);
+    }
+
+    async function handleCheckoutSubmit(e) {
+      e.preventDefault();
+      if (!activeProduct) return;
+
+      const qty = quantities[activeProduct.id] || 1;
+      const totalAmount = activeProduct.price * qty;
+      const name = document.getElementById("buyerName").value.trim();
+      const phone = document.getElementById("buyerPhone").value.trim();
+      const address = document.getElementById("buyerAddress").value.trim();
+      const utr = document.getElementById("buyerUtr").value.trim();
+
+      const payload = {
+        timestamp: new Date().toLocaleString('en-IN', { timeZone: 'Asia/Kolkata' }),
+        product: activeProduct.title,
+        quantity: qty,
+        unitPrice: activeProduct.price,
+        totalAmount: totalAmount,
+        customerName: name,
+        customerPhone: phone,
+        deliveryAddress: address,
+        utrNumber: utr
+      };
+
+      const btn = document.getElementById("submitBtn");
+      btn.disabled = true;
+      btn.innerHTML = `<i class="fa-solid fa-spinner fa-spin"></i> Securing Ledger Entry...`;
+
+      try {
+        const stored = JSON.parse(localStorage.getItem('elitebags_orders') || '[]');
+        stored.push(payload);
+        localStorage.setItem('elitebags_orders', JSON.stringify(stored));
+      } catch (err) {}
+
+      if (CONFIG.GOOGLE_SHEET_WEBHOOK_URL && !CONFIG.GOOGLE_SHEET_WEBHOOK_URL.includes("YOUR_SCRIPT_ID")) {
+        try {
+          await fetch(CONFIG.GOOGLE_SHEET_WEBHOOK_URL, {
+            method: "POST",
+            mode: "no-cors",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(payload)
+          });
+        } catch (fetchErr) {
+          console.warn("Google Sheet sync notice:", fetchErr);
+        }
+      }
+
+      const adminWhatsAppMsg = 
+        `*NEW VERIFIED UPI ORDER — ELITEBAGS*\n\n` +
+        `📦 *Product:* ${activeProduct.title}\n` +
+        `🔢 *Quantity:* ${qty}\n` +
+        `🏷️ *Unit Price:* ₹${activeProduct.price.toLocaleString('en-IN')}\n` +
+        `💰 *Calculated Total:* ₹${totalAmount.toLocaleString('en-IN')}\n` +
+        `🧾 *UTR/Txn Reference:* ${utr}\n\n` +
+        `👤 *Client Name:* ${name}\n` +
+        `📞 *Client Phone:* ${phone}\n` +
+        `📍 *Delivery Address:*\n${address}\n\n` +
+        `_Payment claimed. Please verify UTR credit in your UPI statement and schedule express courier._`;
+
+      const waUrl = `https://wa.me/${CONFIG.ADMIN_PHONE}?text=${encodeURIComponent(adminWhatsAppMsg)}`;
+
+      btn.disabled = false;
+      btn.innerHTML = `<i class="fa-solid fa-lock"></i> Register Order &amp; Dispatch to WhatsApp`;
+      closeCheckout();
+      document.getElementById("checkoutForm").reset();
+
+      window.open(waUrl, '_blank');
+    }
+
+    // =========================================================================
+    // 🎬 3. CINEMATIC VIDEO CONTROLS
+    // =========================================================================
+    function toggleVideoSound() {
+      const vid = document.getElementById("atelierVideo");
+      const icon = document.getElementById("soundIcon");
+      const text = document.getElementById("soundText");
+
+      if (vid.muted) {
+        vid.muted = false;
+        icon.className = "fa-solid fa-volume-high";
+        text.innerText = "Mute Sound";
+      } else {
+        vid.muted = true;
+        icon.className = "fa-solid fa-volume-xmark";
+        text.innerText = "Unmute Sound";
+      }
+    }
+
+    function toggleVideoPlayback() {
+      const vid = document.getElementById("atelierVideo");
+      const icon = document.getElementById("playIcon");
+      const text = document.getElementById("playText");
+
+      if (vid.paused) {
+        vid.play();
+        icon.className = "fa-solid fa-pause";
+        text.innerText = "Pause";
+      } else {
+        vid.pause();
+        icon.className = "fa-solid fa-play";
+        text.innerText = "Play";
+      }
+    }
+
+    // =========================================================================
+    // 🌟 4. MARQUEE AUTO-SLIDING STRIPE LOOP (CUSTOMER REVIEWS)
+    // =========================================================================
+    function renderPatronStripe() {
+      const track1 = document.getElementById("marqueeTrack1");
+      const track2 = document.getElementById("marqueeTrack2");
+
+      const cardHtml = PATRONS.map(p => `
+        <div class="stripe-card">
+          <img src="${p.avatar}" alt="${p.name}" class="stripe-avatar">
+          <div class="stripe-details">
+            <div class="stripe-top">
+              <span class="stripe-name serif">${p.name}</span>
+              <div class="stripe-stars">
+                <i class="fa-solid fa-star"></i>
+                <i class="fa-solid fa-star"></i>
+                <i class="fa-solid fa-star"></i>
+                <i class="fa-solid fa-star"></i>
+                <i class="fa-solid fa-star"></i>
+              </div>
+            </div>
+            <span class="stripe-role">${p.role}</span>
+            <p class="stripe-text">"${p.comment}"</p>
+          </div>
+        </div>
+      `).join('');
+
+      track1.innerHTML = cardHtml;
+      track2.innerHTML = cardHtml;
+    }
+
+    // =========================================================================
+    // 🤝 5. 5 OFFICIAL PARTNERS RENDERER
+    // =========================================================================
+    function renderPartners() {
+      const grid = document.getElementById("partnersGrid");
+      grid.innerHTML = PARTNERS.map(partner => `
+        <div class="partner-card" onmousemove="tiltCard(event, this)" onmouseleave="resetCard(this)">
+          <div class="partner-logo-box">
+            <img src="${partner.logo}" alt="${partner.name}" class="partner-logo">
+          </div>
+          <div>
+            <p class="partner-name serif">${partner.name}</p>
+            <p class="partner-cat">${partner.category}</p>
+          </div>
+        </div>
+      `).join('');
+    }
+
+    // =========================================================================
+    // ✨ 6. ADVANCED MOUSE TRACKING ENGINE (PARTICLES + DUAL RING + CARD TILT)
+    // =========================================================================
+    const cursorDot = document.getElementById('cursorDot');
+    const cursorRing = document.getElementById('cursorRing');
+    const mouseSpotlight = document.getElementById('mouseSpotlight');
+    const canvas = document.getElementById('cursorCanvas');
+    const ctx = canvas ? canvas.getContext('2d') : null;
+
+    let mouse = { x: -100, y: -100 };
+    let ringPos = { x: -100, y: -100 };
+    let particles = [];
+
+    function resizeCanvas() {
+      if (!canvas) return;
+      canvas.width = window.innerWidth;
+      canvas.height = window.innerHeight;
+    }
+    window.addEventListener('resize', resizeCanvas);
+    resizeCanvas();
+
+    window.addEventListener('mousemove', (e) => {
+      mouse.x = e.clientX;
+      mouse.y = e.clientY;
+
+      if (cursorDot) {
+        cursorDot.style.opacity = '1';
+        cursorDot.style.left = `${mouse.x}px`;
+        cursorDot.style.top = `${mouse.y}px`;
+      }
+
+      if (cursorRing) cursorRing.style.opacity = '1';
+
+      if (mouseSpotlight) {
+        mouseSpotlight.style.opacity = '1';
+        mouseSpotlight.style.left = `${mouse.x}px`;
+        mouseSpotlight.style.top = `${mouse.y}px`;
+      }
+
+      if (Math.random() > 0.35) {
+        particles.push({
+          x: mouse.x,
+          y: mouse.y,
+          size: Math.random() * 2.2 + 0.8,
+          speedX: (Math.random() - 0.5) * 1.4,
+          speedY: (Math.random() - 0.5) * 1.4 - 0.3,
+          color: Math.random() > 0.5 ? '212, 175, 55' : '246, 230, 181',
+          alpha: 0.85,
+          decay: Math.random() * 0.025 + 0.018
+        });
+      }
+    });
+
+    window.addEventListener('mouseleave', () => {
+      if (cursorDot) cursorDot.style.opacity = '0';
+      if (cursorRing) cursorRing.style.opacity = '0';
+      if (mouseSpotlight) mouseSpotlight.style.opacity = '0';
+    });
+
+    function renderCursorPhysics() {
+      ringPos.x += (mouse.x - ringPos.x) * 0.18;
+      ringPos.y += (mouse.y - ringPos.y) * 0.18;
+
+      if (cursorRing) {
+        cursorRing.style.left = `${ringPos.x}px`;
+        cursorRing.style.top = `${ringPos.y}px`;
+      }
+
+      if (ctx && canvas) {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        for (let i = particles.length - 1; i >= 0; i--) {
+          const p = particles[i];
+          p.x += p.speedX;
+          p.y += p.speedY;
+          p.alpha -= p.decay;
+
+          if (p.alpha <= 0) {
+            particles.splice(i, 1);
+            continue;
+          }
+
+          ctx.save();
+          ctx.beginPath();
+          ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
+          ctx.fillStyle = `rgba(${p.color}, ${p.alpha})`;
+          ctx.shadowBlur = 6;
+          ctx.shadowColor = 'rgba(212, 175, 55, 0.8)';
+          ctx.fill();
+          ctx.restore();
+        }
+      }
+
+      requestAnimationFrame(renderCursorPhysics);
+    }
+    requestAnimationFrame(renderCursorPhysics);
+
+    document.addEventListener('mouseover', (e) => {
+      const target = e.target.closest('button, a, input, textarea, .card, .partner-card, .stripe-card');
+      if (target && cursorRing) {
+        cursorRing.classList.add('active-hover');
+      }
+    });
+
+    document.addEventListener('mouseout', (e) => {
+      const target = e.target.closest('button, a, input, textarea, .card, .partner-card, .stripe-card');
+      if (target && cursorRing) {
+        cursorRing.classList.remove('active-hover');
+      }
+    });
+
+    function tiltCard(e, card) {
+      if (window.innerWidth < 990) return;
+      const rect = card.getBoundingClientRect();
+      const x = e.clientX - rect.left;
+      const y = e.clientY - rect.top;
+      const centerX = rect.width / 2;
+      const centerY = rect.height / 2;
+      const rotateX = ((y - centerY) / centerY) * -6;
+      const rotateY = ((x - centerX) / centerX) * 6;
+
+      card.style.transform = `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) translateY(-4px)`;
+    }
+
+    function resetCard(card) {
+      card.style.transform = `perspective(1000px) rotateX(0deg) rotateY(0deg) translateY(0px)`;
+    }
+
+    // Bulk Form Handler
+    function handleBulkDispatch(e) {
+      e.preventDefault();
+      const comp = document.getElementById("bulkName").value.trim();
+      const ph = document.getElementById("bulkPhone").value.trim();
+      const qty = document.getElementById("bulkQty").value.trim();
+      const model = document.getElementById("bulkModel").value.trim();
+      const notes = document.getElementById("bulkNotes").value.trim();
+
+      const bulkMsg = 
+        `*CORPORATE / BULK COMMISSION INQUIRY*\n\n` +
+        `🏢 *Entity/Representative:* ${comp}\n` +
+        `📞 *Contact Number:* ${ph}\n` +
+        `🔢 *Estimated Quantity:* ${qty} units\n` +
+        `💼 *Target Edition:* ${model}\n` +
+        `📝 *Specifications & Notes:* ${notes || 'Standard executive finish'}\n\n` +
+        `Hello Director, please provide corporate catalog pricing and debossing timeline.`;
+
+      const url = `https://wa.me/${CONFIG.ADMIN_PHONE}?text=${encodeURIComponent(bulkMsg)}`;
+      window.open(url, '_blank');
+    }
+
+    // Initialize all sections on DOM Ready
+    document.addEventListener("DOMContentLoaded", () => {
+      renderProducts();
+      renderPatronStripe();
+      renderPartners();
+    });
+  </script>
+</body>
+</html>
